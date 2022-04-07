@@ -4,11 +4,11 @@
 	"version": "1.0.0",
 	"homepage": "https://github.com/hlashbrooke/WordPress-Plugin-Template",
 	"main": "Gruntfile.js",
+	"scripts": {
+		"tailwind": "tailwindcss -i ./assets/css/admin.css -o ./assets/css/admin.dist.css",
+		"tailwind:watch": "npm run tailwind -- --watch"
+	},
 	"devDependencies": {
-		"grunt": "^1.0.3",
-		"grunt-contrib-cssmin": "~0.9.0",
-		"grunt-contrib-less": "^2.0.0",
-		"grunt-contrib-uglify": "~0.4.0",
-		"grunt-contrib-watch": "^1.1.0"
+		"tailwindcss": "^3.0.23"
 	}
 }

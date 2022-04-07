@@ -1,4 +1,6 @@
 <?php
+namespace AStA\Bettenboerse;
+
 /**
  * Taxonomy functions file.
  *
@@ -12,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Taxonomy functions class.
  */
-class Bettenboerse_Taxonomy {
+class Taxonomy {
 
 	/**
 	 * The name for the taxonomy.

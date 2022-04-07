@@ -1,11 +1,13 @@
 <?php
+namespace AStA\Bettenboerse;
+
 /**
  * Main plugin class file.
  *
  * @package WordPress Plugin Template/Includes
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
 	exit;
 }
 
@@ -24,11 +26,18 @@ class Bettenboerse {
 	private static $_instance = null; //phpcs:ignore
 
 	/**
-	 * Local instance of Bettenboerse_Admin_API
+	 * Local instance of Admin_UI
 	 *
-	 * @var Bettenboerse_Admin_API|null
+	 * @var Admin_UI|null
 	 */
-	public $admin = null;
+	public $admin_ui = null;
+
+	/**
+	 * Local instance of Admin_API
+	 *
+	 * @var Admin_API|null
+	 */
+	public $admin_api = null;
 
 	/**
 	 * Settings class object
@@ -55,7 +64,7 @@ class Bettenboerse {
 	 * @access  public
 	 * @since   1.0.0
 	 */
-	public $_token; //phpcs:ignore
+	public $slug = 'bettenboerse'; //phpcs:ignore
 
 	/**
 	 * The main plugin file.
@@ -108,36 +117,37 @@ class Bettenboerse {
 	 * @param string $file File constructor.
 	 * @param string $version Plugin version.
 	 */
-	public function __construct( $file = '', $version = '1.0.0' ) {
+	public function __construct($file = '', $version = '1.0.0') {
 		$this->_version = $version;
-		$this->_token   = 'bettenboerse';
 
 		// Load plugin environment variables.
 		$this->file       = $file;
-		$this->dir        = dirname( $this->file );
-		$this->assets_dir = trailingslashit( $this->dir ) . 'assets';
-		$this->assets_url = esc_url( trailingslashit( plugins_url( '/assets/', $this->file ) ) );
+		$this->dir        = dirname($this->file);
+		$this->assets_dir = \trailingslashit($this->dir) . 'assets';
+		$this->assets_url = \esc_url(\trailingslashit(\plugins_url('/assets/', $this->file)));
 
-		$this->script_suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		$this->script_suffix = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '' : '.min';
 
-		register_activation_hook( $this->file, array( $this, 'install' ) );
+		\register_activation_hook($this->file, [$this, 'install']);
 
 		// Load frontend JS & CSS.
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ), 10 );
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 10 );
-
-		// Load admin JS & CSS.
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ), 10, 1 );
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_styles' ), 10, 1 );
+		// Disabled for now, we don't have a "frontend", only admin
+		// add_action('wp_enqueue_scripts', [$this, 'enqueue_styles'], 10);
+		// add_action('wp_enqueue_scripts', [$this, 'enqueue_scripts'], 10);
 
 		// Load API for generic admin functions.
-		if ( is_admin() ) {
-			$this->admin = new Bettenboerse_Admin_API();
+		if (\is_admin()) {
+			$this->admin_ui = new Admin_UI();
 		}
+
+		$this->admin_api = new Admin_API();
+
+		// Database::instance()->seed();
+
 
 		// Handle localisation.
 		$this->load_plugin_textdomain();
-		add_action( 'init', array( $this, 'load_localisation' ), 0 );
+		\add_action('init', [$this, 'load_localisation'], 0);
 	} // End __construct ()
 
 	/**
@@ -149,15 +159,15 @@ class Bettenboerse {
 	 * @param string $description Description.
 	 * @param array  $options Options array.
 	 *
-	 * @return bool|string|Bettenboerse_Post_Type
+	 * @return bool|string|Post_Type
 	 */
-	public function register_post_type( $post_type = '', $plural = '', $single = '', $description = '', $options = array() ) {
+	public function register_post_type($post_type = '', $plural = '', $single = '', $description = '', $options = array()) {
 
-		if ( ! $post_type || ! $plural || ! $single ) {
+		if (! $post_type || ! $plural || ! $single) {
 			return false;
 		}
 
-		$post_type = new Bettenboerse_Post_Type( $post_type, $plural, $single, $description, $options );
+		$post_type = new Post_Type($post_type, $plural, $single, $description, $options);
 
 		return $post_type;
 	}
@@ -171,69 +181,42 @@ class Bettenboerse {
 	 * @param array  $post_types Post types to register this taxonomy for.
 	 * @param array  $taxonomy_args Taxonomy arguments.
 	 *
-	 * @return bool|string|Bettenboerse_Taxonomy
+	 * @return bool|string|Taxonomy
 	 */
-	public function register_taxonomy( $taxonomy = '', $plural = '', $single = '', $post_types = array(), $taxonomy_args = array() ) {
+	public function register_taxonomy($taxonomy = '', $plural = '', $single = '', $post_types = array(), $taxonomy_args = array()) {
 
-		if ( ! $taxonomy || ! $plural || ! $single ) {
+		if (! $taxonomy || ! $plural || ! $single) {
 			return false;
 		}
 
-		$taxonomy = new Bettenboerse_Taxonomy( $taxonomy, $plural, $single, $post_types, $taxonomy_args );
+		$taxonomy = new Taxonomy($taxonomy, $plural, $single, $post_types, $taxonomy_args);
 
 		return $taxonomy;
 	}
 
-	/**
-	 * Load frontend CSS.
-	 *
-	 * @access  public
-	 * @return void
-	 * @since   1.0.0
-	 */
-	public function enqueue_styles() {
-		wp_register_style( $this->_token . '-frontend', esc_url( $this->assets_url ) . 'css/frontend.css', array(), $this->_version );
-		wp_enqueue_style( $this->_token . '-frontend' );
-	} // End enqueue_styles ()
+	// /**
+	//  * Load frontend CSS.
+	//  *
+	//  * @access  public
+	//  * @return void
+	//  * @since   1.0.0
+	//  */
+	// public function enqueue_styles() {
+	// 	wp_register_style($this->slug . '-frontend', esc_url($this->assets_url) . 'css/frontend.css', array(), $this->_version);
+	// 	wp_enqueue_style($this->slug . '-frontend');
+	// } // End enqueue_styles ()
 
-	/**
-	 * Load frontend Javascript.
-	 *
-	 * @access  public
-	 * @return  void
-	 * @since   1.0.0
-	 */
-	public function enqueue_scripts() {
-		wp_register_script( $this->_token . '-frontend', esc_url( $this->assets_url ) . 'js/frontend' . $this->script_suffix . '.js', array( 'jquery' ), $this->_version, true );
-		wp_enqueue_script( $this->_token . '-frontend' );
-	} // End enqueue_scripts ()
-
-	/**
-	 * Admin enqueue style.
-	 *
-	 * @param string $hook Hook parameter.
-	 *
-	 * @return void
-	 */
-	public function admin_enqueue_styles( $hook = '' ) {
-		wp_register_style( $this->_token . '-admin', esc_url( $this->assets_url ) . 'css/admin.css', array(), $this->_version );
-		wp_enqueue_style( $this->_token . '-admin' );
-	} // End admin_enqueue_styles ()
-
-	/**
-	 * Load admin Javascript.
-	 *
-	 * @access  public
-	 *
-	 * @param string $hook Hook parameter.
-	 *
-	 * @return  void
-	 * @since   1.0.0
-	 */
-	public function admin_enqueue_scripts( $hook = '' ) {
-		wp_register_script( $this->_token . '-admin', esc_url( $this->assets_url ) . 'js/admin' . $this->script_suffix . '.js', array( 'jquery' ), $this->_version, true );
-		wp_enqueue_script( $this->_token . '-admin' );
-	} // End admin_enqueue_scripts ()
+	// /**
+	//  * Load frontend Javascript.
+	//  *
+	//  * @access  public
+	//  * @return  void
+	//  * @since   1.0.0
+	//  */
+	// public function enqueue_scripts() {
+	// 	wp_register_script($this->slug . '-frontend', esc_url($this->assets_url) . 'js/frontend' . $this->script_suffix . '.js', ['jquery'), ]his->_version, true);
+	// 	wp_enqueue_script($this->slug . '-frontend');
+	// } // End enqueue_scripts ()
 
 	/**
 	 * Load plugin localisation
@@ -243,7 +226,7 @@ class Bettenboerse {
 	 * @since   1.0.0
 	 */
 	public function load_localisation() {
-		load_plugin_textdomain( 'bettenboerse', false, dirname( plugin_basename( $this->file ) ) . '/lang/' );
+		\load_plugin_textdomain('bettenboerse', false, dirname(\plugin_basename($this->file)) . '/lang/');
 	} // End load_localisation ()
 
 	/**
@@ -256,10 +239,10 @@ class Bettenboerse {
 	public function load_plugin_textdomain() {
 		$domain = 'bettenboerse';
 
-		$locale = apply_filters( 'plugin_locale', get_locale(), $domain );
+		$locale = \apply_filters('plugin_locale', \get_locale(), $domain);
 
-		load_textdomain( $domain, WP_LANG_DIR . '/' . $domain . '/' . $domain . '-' . $locale . '.mo' );
-		load_plugin_textdomain( $domain, false, dirname( plugin_basename( $this->file ) ) . '/lang/' );
+		\load_textdomain($domain, WP_LANG_DIR . '/' . $domain . '/' . $domain . '-' . $locale . '.mo');
+		\load_plugin_textdomain($domain, false, dirname(\plugin_basename($this->file)) . '/lang/');
 	} // End load_plugin_textdomain ()
 
 	/**
@@ -275,9 +258,9 @@ class Bettenboerse {
 	 * @since 1.0.0
 	 * @static
 	 */
-	public static function instance( $file = '', $version = '1.0.0' ) {
-		if ( is_null( self::$_instance ) ) {
-			self::$_instance = new self( $file, $version );
+	public static function instance($file = '', $version = '1.0.0') {
+		if (is_null(self::$_instance)) {
+			self::$_instance = new self($file, $version);
 		}
 
 		return self::$_instance;
@@ -289,7 +272,7 @@ class Bettenboerse {
 	 * @since 1.0.0
 	 */
 	public function __clone() {
-		_doing_it_wrong( __FUNCTION__, esc_html( __( 'Cloning of Bettenboerse is forbidden' ) ), esc_attr( $this->_version ) );
+		_doing_it_wrong(__FUNCTION__, esc_html(__('Cloning of Bettenboerse is forbidden')), esc_attr($this->_version));
 
 	} // End __clone ()
 
@@ -299,7 +282,7 @@ class Bettenboerse {
 	 * @since 1.0.0
 	 */
 	public function __wakeup() {
-		_doing_it_wrong( __FUNCTION__, esc_html( __( 'Unserializing instances of Bettenboerse is forbidden' ) ), esc_attr( $this->_version ) );
+		_doing_it_wrong(__FUNCTION__, esc_html(__('Unserializing instances of Bettenboerse is forbidden')), esc_attr($this->_version));
 	} // End __wakeup ()
 
 	/**
@@ -311,6 +294,8 @@ class Bettenboerse {
 	 */
 	public function install() {
 		$this->_log_version_number();
+
+		Database::instance()->install();
 	} // End install ()
 
 	/**
@@ -321,7 +306,7 @@ class Bettenboerse {
 	 * @since   1.0.0
 	 */
 	private function _log_version_number() { //phpcs:ignore
-		update_option( $this->_token . '_version', $this->_version );
+		update_option($this->slug . '_version', $this->_version);
 	} // End _log_version_number ()
 
 }

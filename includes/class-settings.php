@@ -1,4 +1,6 @@
 <?php
+namespace AStA\Bettenboerse;
+
 /**
  * Settings class file.
  *
@@ -12,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Settings class.
  */
-class Bettenboerse_Settings {
+class Settings {
 
 	/**
 	 * The single instance of Bettenboerse_Settings.
@@ -39,7 +41,7 @@ class Bettenboerse_Settings {
 	 * @access  public
 	 * @since   1.0.0
 	 */
-	public $base = '';
+	public $base = 'bettenboerse';
 
 	/**
 	 * Available settings for plugin.
@@ -61,16 +63,16 @@ class Bettenboerse_Settings {
 		$this->base = 'wpt_';
 
 		// Initialise settings.
-		add_action( 'init', array( $this, 'init_settings' ), 11 );
+		\add_action( 'init', array( $this, 'init_settings' ), 11 );
 
 		// Register plugin settings.
-		add_action( 'admin_init', array( $this, 'register_settings' ) );
+		\add_action( 'admin_init', array( $this, 'register_settings' ) );
 
 		// Add settings page to menu.
-		add_action( 'admin_menu', array( $this, 'add_menu_item' ) );
+		\add_action( 'admin_menu', array( $this, 'add_menu_item' ) );
 
 		// Add settings link to plugins page.
-		add_filter(
+		\add_filter(
 			'plugin_action_links_' . plugin_basename( $this->parent->file ),
 			array(
 				$this,
@@ -79,7 +81,7 @@ class Bettenboerse_Settings {
 		);
 
 		// Configure placement of plugin settings page. See readme for implementation.
-		add_filter( $this->base . 'menu_settings', array( $this, 'configure_settings' ) );
+		\add_filter( $this->base . 'menu_settings', array( $this, 'configure_settings' ) );
 	}
 
 	/**
@@ -113,7 +115,7 @@ class Bettenboerse_Settings {
 				default:
 					return;
 			}
-			add_action( 'admin_print_styles-' . $page, array( $this, 'settings_assets' ) );
+			\add_action( 'admin_print_styles-' . $page, array( $this, 'settings_assets' ) );
 		}
 	}
 
@@ -123,7 +125,7 @@ class Bettenboerse_Settings {
 	 * @return mixed|void
 	 */
 	private function menu_settings() {
-		return apply_filters(
+		return \apply_filters(
 			$this->base . 'menu_settings',
 			array(
 				'location'    => 'options', // Possible settings: options, menu, submenu.
@@ -131,7 +133,7 @@ class Bettenboerse_Settings {
 				'page_title'  => __( 'Plugin Settings', 'bettenboerse' ),
 				'menu_title'  => __( 'Plugin Settings', 'bettenboerse' ),
 				'capability'  => 'manage_options',
-				'menu_slug'   => $this->parent->_token . '_settings',
+				'menu_slug'   => $this->parent->slug . '_settings',
 				'function'    => array( $this, 'settings_page' ),
 				'icon_url'    => '',
 				'position'    => null,
@@ -166,8 +168,8 @@ class Bettenboerse_Settings {
 		// If you're not including an image upload then you can leave this function call out.
 		wp_enqueue_media();
 
-		wp_register_script( $this->parent->_token . '-settings-js', $this->parent->assets_url . 'js/settings' . $this->parent->script_suffix . '.js', array( 'farbtastic', 'jquery' ), '1.0.0', true );
-		wp_enqueue_script( $this->parent->_token . '-settings-js' );
+		wp_register_script( $this->parent->slug . '-settings-js', $this->parent->assets_url . 'js/settings' . $this->parent->script_suffix . '.js', array( 'farbtastic', 'jquery' ), '1.0.0', true );
+		wp_enqueue_script( $this->parent->slug . '-settings-js' );
 	}
 
 	/**
@@ -177,7 +179,7 @@ class Bettenboerse_Settings {
 	 * @return array        Modified links.
 	 */
 	public function add_settings_link( $links ) {
-		$settings_link = '<a href="options-general.php?page=' . $this->parent->_token . '_settings">' . __( 'Settings', 'bettenboerse' ) . '</a>';
+		$settings_link = '<a href="options-general.php?page=' . $this->parent->slug . '_settings">' . __( 'Settings', 'bettenboerse' ) . '</a>';
 		array_push( $links, $settings_link );
 		return $links;
 	}
@@ -314,7 +316,7 @@ class Bettenboerse_Settings {
 			),
 		);
 
-		$settings = apply_filters( $this->parent->_token . '_settings_fields', $settings );
+		$settings = \apply_filters( $this->parent->slug . '_settings_fields', $settings );
 
 		return $settings;
 	}
@@ -346,7 +348,7 @@ class Bettenboerse_Settings {
 				}
 
 				// Add section to page.
-				add_settings_section( $section, $data['title'], array( $this, 'settings_section' ), $this->parent->_token . '_settings' );
+				add_settings_section( $section, $data['title'], array( $this, 'settings_section' ), $this->parent->slug . '_settings' );
 
 				foreach ( $data['fields'] as $field ) {
 
@@ -358,14 +360,14 @@ class Bettenboerse_Settings {
 
 					// Register field.
 					$option_name = $this->base . $field['id'];
-					register_setting( $this->parent->_token . '_settings', $option_name, $validation );
+					register_setting( $this->parent->slug . '_settings', $option_name, $validation );
 
 					// Add field to page.
 					add_settings_field(
 						$field['id'],
 						$field['label'],
-						array( $this->parent->admin, 'display_field' ),
-						$this->parent->_token . '_settings',
+						array( $this->parent->admin_ui, 'display_field' ),
+						$this->parent->slug . '_settings',
 						$section,
 						array(
 							'field'  => $field,
@@ -400,7 +402,7 @@ class Bettenboerse_Settings {
 	public function settings_page() {
 
 		// Build page HTML.
-		$html      = '<div class="wrap" id="' . $this->parent->_token . '_settings">' . "\n";
+		$html      = '<div class="wrap" id="' . $this->parent->slug . '_settings">' . "\n";
 			$html .= '<h2>' . __( 'Plugin Settings', 'bettenboerse' ) . '</h2>' . "\n";
 
 			$tab = '';
@@ -449,8 +451,8 @@ class Bettenboerse_Settings {
 
 				// Get settings fields.
 				ob_start();
-				settings_fields( $this->parent->_token . '_settings' );
-				do_settings_sections( $this->parent->_token . '_settings' );
+				settings_fields( $this->parent->slug . '_settings' );
+				do_settings_sections( $this->parent->slug . '_settings' );
 				$html .= ob_get_clean();
 
 				$html     .= '<p class="submit">' . "\n";

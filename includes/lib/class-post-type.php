@@ -1,9 +1,5 @@
 <?php
-/**
- * Post type declaration file.
- *
- * @package WordPress Plugin Template/Includes
- */
+namespace AStA\Bettenboerse;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -12,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Post type declaration class.
  */
-class Bettenboerse_Post_Type {
+class Post_Type {
 
 	/**
 	 * The name for the custom post type.
