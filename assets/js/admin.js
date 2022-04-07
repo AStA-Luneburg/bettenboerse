@@ -20,17 +20,19 @@ const BETTENBOERSE = {
 			.replace(/>/g, '&gt;')
 			.replace(/"/g, '&quot;');
 	},
-	TYPE_MAP: {
-		['request']: 'Ersuch',
-		['offer']: 'Angebot',
+	ICON_MAP: {
+		['request']: '🛏',
+		['offer']: '🏠',
 	},
 	ICON_TYPE_MAP: {
 		['request']: '🛏 Ersuch',
 		['offer']: '🏠 Angebot',
 	},
 	CLASS_TYPE_MAP: {
-		['request']: 'text-blue-900 bg-blue-300 border-blue-400 request',
-		['offer']: 'text-pink-900 bg-pink-300 border-pink-400 offer',
+		['request']:
+			'text-blue-900 bg-blue-300 border-blue-400 request cursor-pointer',
+		['offer']:
+			'text-pink-900 bg-pink-300 border-pink-400 offer cursor-pointer',
 	},
 
 	transformToDataSet(announcements) {
@@ -41,10 +43,10 @@ const BETTENBOERSE = {
 					id: announcement.id,
 					type: 'range',
 					content: `<strong>${
-						BETTENBOERSE.ICON_TYPE_MAP[announcement.type]
-					}</strong> – ${BETTENBOERSE.htmlEntities(
+						BETTENBOERSE.ICON_MAP[announcement.type]
+					}&nbsp;${BETTENBOERSE.htmlEntities(
 						announcement.name
-					)}`,
+					)}</strong>`,
 					start: announcement.from,
 					end: announcement.until,
 					className: BETTENBOERSE.CLASS_TYPE_MAP[announcement.type],

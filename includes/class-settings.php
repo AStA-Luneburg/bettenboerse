@@ -7,7 +7,7 @@ namespace AStA\Bettenboerse;
  * @package WordPress Plugin Template/Settings
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
 	exit;
 }
 
@@ -57,23 +57,23 @@ class Settings {
 	 *
 	 * @param object $parent Parent object.
 	 */
-	public function __construct( $parent ) {
+	public function __construct($parent) {
 		$this->parent = $parent;
 
-		$this->base = 'wpt_';
+		$this->base = 'bettenboerse_';
 
 		// Initialise settings.
-		\add_action( 'init', array( $this, 'init_settings' ), 11 );
+		\add_action('init', array($this, 'init_settings'), 11);
 
 		// Register plugin settings.
-		\add_action( 'admin_init', array( $this, 'register_settings' ) );
+		\add_action('admin_init', array($this, 'register_settings'));
 
 		// Add settings page to menu.
-		\add_action( 'admin_menu', array( $this, 'add_menu_item' ) );
+		\add_action('admin_menu', array($this, 'add_menu_item'));
 
 		// Add settings link to plugins page.
 		\add_filter(
-			'plugin_action_links_' . plugin_basename( $this->parent->file ),
+			'plugin_action_links_' . plugin_basename($this->parent->file),
 			array(
 				$this,
 				'add_settings_link',
@@ -81,7 +81,7 @@ class Settings {
 		);
 
 		// Configure placement of plugin settings page. See readme for implementation.
-		\add_filter( $this->base . 'menu_settings', array( $this, 'configure_settings' ) );
+		\add_filter($this->base . 'menu_settings', array($this, 'configure_settings'));
 	}
 
 	/**
@@ -103,19 +103,19 @@ class Settings {
 		$args = $this->menu_settings();
 
 		// Do nothing if wrong location key is set.
-		if ( is_array( $args ) && isset( $args['location'] ) && function_exists( 'add_' . $args['location'] . '_page' ) ) {
-			switch ( $args['location'] ) {
+		if (is_array($args) && isset($args['location']) && function_exists('add_' . $args['location'] . '_page')) {
+			switch ($args['location']) {
 				case 'options':
 				case 'submenu':
-					$page = add_submenu_page( $args['parent_slug'], $args['page_title'], $args['menu_title'], $args['capability'], $args['menu_slug'], $args['function'] );
+					$page = add_submenu_page($args['parent_slug'], $args['page_title'], $args['menu_title'], $args['capability'], $args['menu_slug'], $args['function']);
 					break;
 				case 'menu':
-					$page = add_menu_page( $args['page_title'], $args['menu_title'], $args['capability'], $args['menu_slug'], $args['function'], $args['icon_url'], $args['position'] );
+					$page = add_menu_page($args['page_title'], $args['menu_title'], $args['capability'], $args['menu_slug'], $args['function'], $args['icon_url'], $args['position']);
 					break;
 				default:
 					return;
 			}
-			\add_action( 'admin_print_styles-' . $page, array( $this, 'settings_assets' ) );
+			\add_action('admin_print_styles-' . $page, array($this, 'settings_assets'));
 		}
 	}
 
@@ -130,11 +130,11 @@ class Settings {
 			array(
 				'location'    => 'options', // Possible settings: options, menu, submenu.
 				'parent_slug' => 'options-general.php',
-				'page_title'  => __( 'Plugin Settings', 'bettenboerse' ),
-				'menu_title'  => __( 'Plugin Settings', 'bettenboerse' ),
+				'page_title'  => __('Einstellungen der Bettenbörse', 'bettenboerse'),
+				'menu_title'  => __('Bettenbörse', 'bettenboerse'),
 				'capability'  => 'manage_options',
 				'menu_slug'   => $this->parent->slug . '_settings',
-				'function'    => array( $this, 'settings_page' ),
+				'function'    => array($this, 'settings_page'),
 				'icon_url'    => '',
 				'position'    => null,
 			)
@@ -148,7 +148,7 @@ class Settings {
 	 *
 	 * @return array
 	 */
-	public function configure_settings( $settings = array() ) {
+	public function configure_settings($settings = array()) {
 		return $settings;
 	}
 
@@ -158,18 +158,12 @@ class Settings {
 	 * @return void
 	 */
 	public function settings_assets() {
-
-		// We're including the farbtastic script & styles here because they're needed for the colour picker
-		// If you're not including a colour picker field then you can leave these calls out as well as the farbtastic dependency for the wpt-admin-js script below.
-		wp_enqueue_style( 'farbtastic' );
-		wp_enqueue_script( 'farbtastic' );
-
 		// We're including the WP media scripts here because they're needed for the image upload field.
 		// If you're not including an image upload then you can leave this function call out.
 		wp_enqueue_media();
 
-		wp_register_script( $this->parent->slug . '-settings-js', $this->parent->assets_url . 'js/settings' . $this->parent->script_suffix . '.js', array( 'farbtastic', 'jquery' ), '1.0.0', true );
-		wp_enqueue_script( $this->parent->slug . '-settings-js' );
+		wp_register_script($this->parent->slug . '-settings-js', $this->parent->assets_url . 'js/settings' . $this->parent->script_suffix . '.js', array('farbtastic', 'jquery'), '1.0.0', true);
+		wp_enqueue_script($this->parent->slug . '-settings-js');
 	}
 
 	/**
@@ -178,9 +172,9 @@ class Settings {
 	 * @param  array $links Existing links.
 	 * @return array        Modified links.
 	 */
-	public function add_settings_link( $links ) {
-		$settings_link = '<a href="options-general.php?page=' . $this->parent->slug . '_settings">' . __( 'Settings', 'bettenboerse' ) . '</a>';
-		array_push( $links, $settings_link );
+	public function add_settings_link($links) {
+		$settings_link = '<a href="options-general.php?page=' . $this->parent->slug . '_settings">' . __('Settings', 'bettenboerse') . '</a>';
+		array_push($links, $settings_link);
 		return $links;
 	}
 
@@ -190,133 +184,159 @@ class Settings {
 	 * @return array Fields to be displayed on settings page
 	 */
 	private function settings_fields() {
-
+		// 0 => 'name',
+		// 1 => 'email',
+		// 3 => 'type',
+		// 4 => 'phone',
+		// 6 => 'bedType',
+		// 8 => 'bedCount',
+		// 9 => 'from',
+		// 10 => 'until',
+		// 12 => 'locationHint',
+		// 13 => 'wishes',
+		// 14 => 'privacy',
+		// 15 => 'gender',
+		// //
 		$settings['standard'] = array(
-			'title'       => __( 'Standard', 'bettenboerse' ),
-			'description' => __( 'These are fairly standard form input fields.', 'bettenboerse' ),
+			'title'       => __('WPForms Zuweisung', 'bettenboerse'),
+			'description' => __('Die Felder des Formulars können hier den Daten zugeteilt werden.', 'bettenboerse'),
 			'fields'      => array(
 				array(
-					'id'          => 'text_field',
-					'label'       => __( 'Some Text', 'bettenboerse' ),
-					'description' => __( 'This is a standard text field.', 'bettenboerse' ),
-					'type'        => 'text',
-					'default'     => '',
-					'placeholder' => __( 'Placeholder text', 'bettenboerse' ),
-				),
-				array(
-					'id'          => 'password_field',
-					'label'       => __( 'A Password', 'bettenboerse' ),
-					'description' => __( 'This is a standard password field.', 'bettenboerse' ),
-					'type'        => 'password',
-					'default'     => '',
-					'placeholder' => __( 'Placeholder text', 'bettenboerse' ),
-				),
-				array(
-					'id'          => 'secret_text_field',
-					'label'       => __( 'Some Secret Text', 'bettenboerse' ),
-					'description' => __( 'This is a secret text field - any data saved here will not be displayed after the page has reloaded, but it will be saved.', 'bettenboerse' ),
-					'type'        => 'text_secret',
-					'default'     => '',
-					'placeholder' => __( 'Placeholder text', 'bettenboerse' ),
-				),
-				array(
-					'id'          => 'text_block',
-					'label'       => __( 'A Text Block', 'bettenboerse' ),
-					'description' => __( 'This is a standard text area.', 'bettenboerse' ),
-					'type'        => 'textarea',
-					'default'     => '',
-					'placeholder' => __( 'Placeholder text for this textarea', 'bettenboerse' ),
-				),
-				array(
-					'id'          => 'single_checkbox',
-					'label'       => __( 'An Option', 'bettenboerse' ),
-					'description' => __( 'A standard checkbox - if you save this option as checked then it will store the option as \'on\', otherwise it will be an empty string.', 'bettenboerse' ),
-					'type'        => 'checkbox',
-					'default'     => '',
-				),
-				array(
-					'id'          => 'select_box',
-					'label'       => __( 'A Select Box', 'bettenboerse' ),
-					'description' => __( 'A standard select box.', 'bettenboerse' ),
-					'type'        => 'select',
-					'options'     => array(
-						'drupal'    => 'Drupal',
-						'joomla'    => 'Joomla',
-						'wordpress' => 'WordPress',
-					),
-					'default'     => 'wordpress',
-				),
-				array(
-					'id'          => 'radio_buttons',
-					'label'       => __( 'Some Options', 'bettenboerse' ),
-					'description' => __( 'A standard set of radio buttons.', 'bettenboerse' ),
-					'type'        => 'radio',
-					'options'     => array(
-						'superman' => 'Superman',
-						'batman'   => 'Batman',
-						'ironman'  => 'Iron Man',
-					),
-					'default'     => 'batman',
-				),
-				array(
-					'id'          => 'multiple_checkboxes',
-					'label'       => __( 'Some Items', 'bettenboerse' ),
-					'description' => __( 'You can select multiple items and they will be stored as an array.', 'bettenboerse' ),
-					'type'        => 'checkbox_multi',
-					'options'     => array(
-						'square'    => 'Square',
-						'circle'    => 'Circle',
-						'rectangle' => 'Rectangle',
-						'triangle'  => 'Triangle',
-					),
-					'default'     => array( 'circle', 'triangle' ),
-				),
-			),
-		);
-
-		$settings['extra'] = array(
-			'title'       => __( 'Extra', 'bettenboerse' ),
-			'description' => __( 'These are some extra input fields that maybe aren\'t as common as the others.', 'bettenboerse' ),
-			'fields'      => array(
-				array(
-					'id'          => 'number_field',
-					'label'       => __( 'A Number', 'bettenboerse' ),
-					'description' => __( 'This is a standard number field - if this field contains anything other than numbers then the form will not be submitted.', 'bettenboerse' ),
+					'id'          => 'name_field',
+					'label'       => __('Feld für den Namen', 'bettenboerse'),
+					'description' => __('Feld-Inhalt: Text', 'bettenboerse'),
 					'type'        => 'number',
+					'min'         => 0,
 					'default'     => '',
-					'placeholder' => __( '42', 'bettenboerse' ),
+					'placeholder' => __('Feld-ID', 'bettenboerse'),
 				),
 				array(
-					'id'          => 'colour_picker',
-					'label'       => __( 'Pick a colour', 'bettenboerse' ),
-					'description' => __( 'This uses WordPress\' built-in colour picker - the option is stored as the colour\'s hex code.', 'bettenboerse' ),
-					'type'        => 'color',
-					'default'     => '#21759B',
-				),
-				array(
-					'id'          => 'an_image',
-					'label'       => __( 'An Image', 'bettenboerse' ),
-					'description' => __( 'This will upload an image to your media library and store the attachment ID in the option field. Once you have uploaded an imge the thumbnail will display above these buttons.', 'bettenboerse' ),
-					'type'        => 'image',
+					'id'          => 'email_field',
+					'label'       => __('Feld für die E-Mail', 'bettenboerse'),
+					'description' => __('Feld-Inhalt: Text / E-Mail', 'bettenboerse'),
+					'type'        => 'number',
+					'min'         => 0,
 					'default'     => '',
-					'placeholder' => '',
+					'placeholder' => __('Feld-ID', 'bettenboerse'),
 				),
 				array(
-					'id'          => 'multi_select_box',
-					'label'       => __( 'A Multi-Select Box', 'bettenboerse' ),
-					'description' => __( 'A standard multi-select box - the saved data is stored as an array.', 'bettenboerse' ),
-					'type'        => 'select_multi',
-					'options'     => array(
-						'linux'   => 'Linux',
-						'mac'     => 'Mac',
-						'windows' => 'Windows',
-					),
-					'default'     => array( 'linux' ),
+					'id'          => 'type_field',
+					'label'       => __('Feld für die Art der Anfrage', 'bettenboerse'),
+					'description' => __('Feld-Inhalt: Multi-Choice', 'bettenboerse'),
+					'type'        => 'number',
+					'min'         => 0,
+					'default'     => '',
+					'placeholder' => __('Feld-ID', 'bettenboerse'),
+				),
+				array(
+					'id'          => 'phone_field',
+					'label'       => __('Feld für die Telefonnummer', 'bettenboerse'),
+					'description' => __('Feld-Inhalt: Text', 'bettenboerse'),
+					'type'        => 'number',
+					'min'         => 0,
+					'default'     => '',
+					'placeholder' => __('Feld-ID', 'bettenboerse'),
+				),
+				array(
+					'id'          => 'bedType_field',
+					'label'       => __('Feld für die Art der Betten', 'bettenboerse'),
+					'description' => __('Feld-Inhalt: Text', 'bettenboerse'),
+					'type'        => 'number',
+					'min'         => 0,
+					'default'     => '',
+					'placeholder' => __('Feld-ID', 'bettenboerse'),
+				),
+				array(
+					'id'          => 'bedCount_field',
+					'label'       => __('Feld für die Anzahl der Betten', 'bettenboerse'),
+					'description' => __('Feld-Inhalt: Nummer', 'bettenboerse'),
+					'type'        => 'number',
+					'min'         => 0,
+					'default'     => '',
+					'placeholder' => __('Feld-ID', 'bettenboerse'),
+				),
+				array(
+					'id'          => 'from_field',
+					'label'       => __('Feld für das Start-Datum', 'bettenboerse'),
+					'description' => __('Feld-Inhalt: Datum', 'bettenboerse'),
+					'type'        => 'number',
+					'min'         => 0,
+					'default'     => '',
+					'placeholder' => __('Feld-ID', 'bettenboerse'),
+				),
+				array(
+					'id'          => 'until_field',
+					'label'       => __('Feld für das End-Datum', 'bettenboerse'),
+					'description' => __('Feld-Inhalt: Datum', 'bettenboerse'),
+					'type'        => 'number',
+					'min'         => 0,
+					'default'     => '',
+					'placeholder' => __('Feld-ID', 'bettenboerse'),
+				),
+				array(
+					'id'          => 'locationHint_field',
+					'label'       => __('Feld für die Ortsinformationen', 'bettenboerse'),
+					'description' => __('Feld-Inhalt: Text', 'bettenboerse'),
+					'type'        => 'number',
+					'min'         => 0,
+					'default'     => '',
+					'placeholder' => __('Feld-ID', 'bettenboerse'),
+				),
+				array(
+					'id'          => 'wishes_field',
+					'label'       => __('Feld für die Wünsche', 'bettenboerse'),
+					'description' => __('Feld-Inhalt: Text', 'bettenboerse'),
+					'type'        => 'number',
+					'min'         => 0,
+					'default'     => '',
+					'placeholder' => __('Feld-ID', 'bettenboerse'),
+				),
+				array(
+					'id'          => 'gender_field',
+					'label'       => __('Feld für das Geschlecht', 'bettenboerse'),
+					'description' => __('Feld-Inhalt: Text', 'bettenboerse'),
+					'type'        => 'number',
+					'min'         => 0,
+					'default'     => '',
+					'placeholder' => __('Feld-ID', 'bettenboerse'),
+				),
+				array(
+					'id'          => 'privacy_field',
+					'label'       => __('Feld für das Datenschutz-Häckchen', 'bettenboerse'),
+					'description' => __('Feld-Inhalt: Haken gesetzt', 'bettenboerse'),
+					'type'        => 'number',
+					'min'         => 0,
+					'default'     => '',
+					'placeholder' => __('Feld-ID', 'bettenboerse'),
 				),
 			),
 		);
 
-		$settings = \apply_filters( $this->parent->slug . '_settings_fields', $settings );
+		$settings['types'] = array(
+			'title'       => __('Typ-Zuweisung', 'bettenboerse'),
+			'description' => __('Damit die Art der Anfrage richtig erkannt wird, müssen die Multiple-Choice Texte hier Ersuch und Angebot zugewiesen werden.', 'bettenboerse'),
+			'fields'      => array(
+				array(
+					'id'          => 'offer_multi_field',
+					'label'       => __('Angebot Text', 'bettenboerse'),
+					'description' => __('Dieses Feld muss mit dem in WPForms identisch sein.', 'bettenboerse'),
+					'type'        => 'text',
+					'default'     => 'Ich biete',
+					'placeholder' => __('Ich biete', 'bettenboerse'),
+					'required'    => true
+				),
+				array(
+					'id'          => 'request_multi_field',
+					'label'       => __('Ersuch Text', 'bettenboerse'),
+					'description' => __('Dieses Feld muss mit dem in WPForms identisch sein.', 'bettenboerse'),
+					'type'        => 'text',
+					'default'     => 'Ich suche',
+					'placeholder' => __('Ich suche', 'bettenboerse'),
+				),
+			),
+		);
+
+		$settings = \apply_filters($this->parent->slug . '_settings_fields', $settings);
 
 		return $settings;
 	}
@@ -327,46 +347,46 @@ class Settings {
 	 * @return void
 	 */
 	public function register_settings() {
-		if ( is_array( $this->settings ) ) {
+		if (is_array($this->settings)) {
 
 			// Check posted/selected tab.
 			//phpcs:disable
 			$current_section = '';
-			if ( isset( $_POST['tab'] ) && $_POST['tab'] ) {
+			if (isset($_POST['tab']) && $_POST['tab']) {
 				$current_section = $_POST['tab'];
 			} else {
-				if ( isset( $_GET['tab'] ) && $_GET['tab'] ) {
+				if (isset($_GET['tab']) && $_GET['tab']) {
 					$current_section = $_GET['tab'];
 				}
 			}
 			//phpcs:enable
 
-			foreach ( $this->settings as $section => $data ) {
+			foreach ($this->settings as $section => $data) {
 
-				if ( $current_section && $current_section !== $section ) {
+				if ($current_section && $current_section !== $section) {
 					continue;
 				}
 
 				// Add section to page.
-				add_settings_section( $section, $data['title'], array( $this, 'settings_section' ), $this->parent->slug . '_settings' );
+				add_settings_section($section, $data['title'], array($this, 'settings_section'), $this->parent->slug . '_settings');
 
-				foreach ( $data['fields'] as $field ) {
+				foreach ($data['fields'] as $field) {
 
 					// Validation callback for field.
 					$validation = '';
-					if ( isset( $field['callback'] ) ) {
+					if (isset($field['callback'])) {
 						$validation = $field['callback'];
 					}
 
 					// Register field.
 					$option_name = $this->base . $field['id'];
-					register_setting( $this->parent->slug . '_settings', $option_name, $validation );
+					register_setting($this->parent->slug . '_settings', $option_name, $validation);
 
 					// Add field to page.
 					add_settings_field(
 						$field['id'],
 						$field['label'],
-						array( $this->parent->admin_ui, 'display_field' ),
+						array($this->parent->admin_api, 'display_field'),
 						$this->parent->slug . '_settings',
 						$section,
 						array(
@@ -376,7 +396,7 @@ class Settings {
 					);
 				}
 
-				if ( ! $current_section ) {
+				if (! $current_section) {
 					break;
 				}
 			}
@@ -389,7 +409,7 @@ class Settings {
 	 * @param array $section Array of section ids.
 	 * @return void
 	 */
-	public function settings_section( $section ) {
+	public function settings_section($section) {
 		$html = '<p> ' . $this->settings[ $section['id'] ]['description'] . '</p>' . "\n";
 		echo $html; //phpcs:ignore
 	}
@@ -403,43 +423,43 @@ class Settings {
 
 		// Build page HTML.
 		$html      = '<div class="wrap" id="' . $this->parent->slug . '_settings">' . "\n";
-			$html .= '<h2>' . __( 'Plugin Settings', 'bettenboerse' ) . '</h2>' . "\n";
+			$html .= '<h2>' . __('Einstellungen der Bettenbörse', 'bettenboerse') . '</h2>' . "\n";
 
 			$tab = '';
 		//phpcs:disable
-		if ( isset( $_GET['tab'] ) && $_GET['tab'] ) {
+		if (isset($_GET['tab']) && $_GET['tab']) {
 			$tab .= $_GET['tab'];
 		}
 		//phpcs:enable
 
 		// Show page tabs.
-		if ( is_array( $this->settings ) && 1 < count( $this->settings ) ) {
+		if (is_array($this->settings) && 1 < count($this->settings)) {
 
 			$html .= '<h2 class="nav-tab-wrapper">' . "\n";
 
 			$c = 0;
-			foreach ( $this->settings as $section => $data ) {
+			foreach ($this->settings as $section => $data) {
 
 				// Set tab class.
 				$class = 'nav-tab';
-				if ( ! isset( $_GET['tab'] ) ) { //phpcs:ignore
-					if ( 0 === $c ) {
+				if (! isset($_GET['tab'])) { //phpcs:ignore
+					if (0 === $c) {
 						$class .= ' nav-tab-active';
 					}
 				} else {
-					if ( isset( $_GET['tab'] ) && $section == $_GET['tab'] ) { //phpcs:ignore
+					if (isset($_GET['tab']) && $section == $_GET['tab']) { //phpcs:ignore
 						$class .= ' nav-tab-active';
 					}
 				}
 
 				// Set tab link.
-				$tab_link = add_query_arg( array( 'tab' => $section ) );
-				if ( isset( $_GET['settings-updated'] ) ) { //phpcs:ignore
-					$tab_link = remove_query_arg( 'settings-updated', $tab_link );
+				$tab_link = add_query_arg(array('tab' => $section));
+				if (isset($_GET['settings-updated'])) { //phpcs:ignore
+					$tab_link = remove_query_arg('settings-updated', $tab_link);
 				}
 
 				// Output tab.
-				$html .= '<a href="' . $tab_link . '" class="' . esc_attr( $class ) . '">' . esc_html( $data['title'] ) . '</a>' . "\n";
+				$html .= '<a href="' . $tab_link . '" class="' . esc_attr($class) . '">' . esc_html($data['title']) . '</a>' . "\n";
 
 				++$c;
 			}
@@ -451,13 +471,13 @@ class Settings {
 
 				// Get settings fields.
 				ob_start();
-				settings_fields( $this->parent->slug . '_settings' );
-				do_settings_sections( $this->parent->slug . '_settings' );
+				settings_fields($this->parent->slug . '_settings');
+				do_settings_sections($this->parent->slug . '_settings');
 				$html .= ob_get_clean();
 
 				$html     .= '<p class="submit">' . "\n";
-					$html .= '<input type="hidden" name="tab" value="' . esc_attr( $tab ) . '" />' . "\n";
-					$html .= '<input name="Submit" type="submit" class="button-primary" value="' . esc_attr( __( 'Save Settings', 'bettenboerse' ) ) . '" />' . "\n";
+					$html .= '<input type="hidden" name="tab" value="' . esc_attr($tab) . '" />' . "\n";
+					$html .= '<input name="Submit" type="submit" class="button-primary" value="' . esc_attr(__('Save Settings', 'bettenboerse')) . '" />' . "\n";
 				$html     .= '</p>' . "\n";
 			$html         .= '</form>' . "\n";
 		$html             .= '</div>' . "\n";
@@ -476,9 +496,9 @@ class Settings {
 	 * @param object $parent Object instance.
 	 * @return object Bettenboerse_Settings instance
 	 */
-	public static function instance( $parent ) {
-		if ( is_null( self::$_instance ) ) {
-			self::$_instance = new self( $parent );
+	public static function instance($parent) {
+		if (is_null(self::$_instance)) {
+			self::$_instance = new self($parent);
 		}
 		return self::$_instance;
 	} // End instance()
@@ -489,7 +509,7 @@ class Settings {
 	 * @since 1.0.0
 	 */
 	public function __clone() {
-		_doing_it_wrong( __FUNCTION__, esc_html( __( 'Cloning of Bettenboerse_API is forbidden.' ) ), esc_attr( $this->parent->_version ) );
+		_doing_it_wrong(__FUNCTION__, esc_html(__('Cloning of Bettenboerse_API is forbidden.')), esc_attr($this->parent->_version));
 	} // End __clone()
 
 	/**
@@ -498,7 +518,7 @@ class Settings {
 	 * @since 1.0.0
 	 */
 	public function __wakeup() {
-		_doing_it_wrong( __FUNCTION__, esc_html( __( 'Unserializing instances of Bettenboerse_API is forbidden.' ) ), esc_attr( $this->parent->_version ) );
+		_doing_it_wrong(__FUNCTION__, esc_html(__('Unserializing instances of Bettenboerse_API is forbidden.')), esc_attr($this->parent->_version));
 	} // End __wakeup()
 
 }
