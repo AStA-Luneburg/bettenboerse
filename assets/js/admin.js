@@ -29,8 +29,8 @@ const BETTENBOERSE = {
 		['offer']: '🏠 Angebot',
 	},
 	CLASS_TYPE_MAP: {
-		['request']: 'text-blue-900 bg-blue-300 border-blue-400',
-		['offer']: 'text-pink-900 bg-pink-300 border-pink-400',
+		['request']: 'text-blue-900 bg-blue-300 border-blue-400 request',
+		['offer']: 'text-pink-900 bg-pink-300 border-pink-400 offer',
 	},
 
 	transformToDataSet(announcements) {
@@ -89,79 +89,88 @@ const BETTENBOERSE = {
 				}
 			}
 		});
+
+		return timeline;
 	},
 	createAnnouncementTableHTML(announcement) {
 		return `
-			<table class="text-left" cellspacing="10">
-				<tbody>
-					<tr>
-						<th scope="row">Typ:</th>
-						<td>
-							${BETTENBOERSE.ICON_TYPE_MAP[announcement.type]}
-						</td>
-					</tr>
-					<tr>
-						<th scope="row">Name:</th>
-						<td>${BETTENBOERSE.htmlEntities(announcement.name)}</td>
-					</tr>
-					<tr>
-						<th scope="row">Vom:</th>
-						<td>
-							${new Date(announcement.from).toLocaleDateString()}
-						</td>
-					</tr>
-					<tr>
-						<th scope="row">Bis:</th>
-						<td>
-							${new Date(announcement.until).toLocaleDateString()}
-						</td>
-					</tr>
-					<tr>
-						<th scope="row">E-Mail:</th>
-						<td>
+			<div class="flex flex-col w-full gap-5">
+				<div class="flex flex-row gap-5 mb-2">
+					<div class="flex-1">
+						<h2 class="text-lg font-medium">
+							${BETTENBOERSE.htmlEntities(announcement.name)}
+						</h2>
+						<span class="text-gray-500 font-medium">Name</span>
+					</div>
+					<div class="flex-1 flex flex-row gap-5">
+						<div class="flex-1">
+							<h2 class="text-lg font-medium">
+								${new Date(announcement.from).toLocaleDateString()}
+							</h2>
+							<span class="text-gray-500 font-medium">Von</span>
+						</div>
+						<div class="flex-1">
+							<h2 class="text-lg font-medium">
+								${new Date(announcement.until).toLocaleDateString()}
+							</h2>
+							<span class="text-gray-500 font-medium">Bis</span>
+						</div>
+					</div>
+				</div>
+				<div class="flex flex-row gap-5">
+					<div class="flex-1">
+						<h2 class="text-base font-medium">
 							${BETTENBOERSE.htmlEntities(announcement.email)}
-						</td>
-					</tr>
-					<tr>
-						<th scope="row">Telefon:</th>
-						<td>
+						</h2>
+						<span class="text-gray-500 font-medium">E-Mail</span>
+					</div>
+					<div class="flex-1">
+						<h2 class="text-base font-medium">
 							${BETTENBOERSE.htmlEntities(announcement.phone)}
-						</td>
-					</tr>
-					<tr>
-						<th scope="row">Geschlecht:</th>
-						<td>
-							${BETTENBOERSE.htmlEntities(announcement.gender)}
-						</td>
-					</tr>
-					<tr>
-						<th scope="row">Bett-Art:</th>
-						<td>
+						</h2>
+						<span class="text-gray-500 font-medium">Telefon</span>
+					</div>
+				</div>
+				<div class="flex flex-row gap-5">
+					<div class="flex-1">
+						<h2 class="text-base font-medium">
+							${BETTENBOERSE.htmlEntities(announcement.gender || '–')}
+						</h2>
+						<span class="text-gray-500 font-medium">Geschlecht</span>
+					</div>
+				</div>
+				<div class="flex flex-row gap-5">
+					<div class="flex-1">
+						<h2 class="text-base font-medium">
 							${BETTENBOERSE.htmlEntities(announcement.bedType)}
-						</td>
-					</tr>
-					<tr>
-						<th scope="row">Bed-Anzahl:</th>
-						<td>
-							${BETTENBOERSE.htmlEntities(announcement.bedType)}
-						</td>
-					</tr>
-					<tr>
-						<th scope="row" class="pr-5">
-							Ortsinformation:
-						</th>
-						<td>
-							${BETTENBOERSE.htmlEntities(announcement.bedType)}
-						</td>
-					</tr>
-					<tr>
-						<th scope="row">Wünsche:</th>
-						<td>
-							${BETTENBOERSE.htmlEntities(announcement.bedType)}
-						</td>
-					</tr>
-				</tbody>
-			</table>
+						</h2>
+						<span class="text-gray-500 font-medium">Bett-Typ</span>
+					</div>
+					<div class="flex-1">
+						<h2 class="text-base font-medium">
+							${parseInt(announcement.bedCount)} 
+							
+							${'🛏'.repeat(Math.min(10, parseInt(announcement.bedCount)))} 
+						</h2>
+						<span class="text-gray-500 font-medium">Anzahl an Betten</span>
+					</div>
+				</div>
+
+				<div class="flex flex-row gap-5 justify-between">
+					<div class="flex-1">
+						<h2 class="text-base font-medium">
+							${BETTENBOERSE.htmlEntities(announcement.locationHints)}
+						</h2>
+						<span class="text-gray-500 font-medium">Ortsinformationen</span>
+					</div>
+					<div class="flex-1">
+						<h2 class="text-base font-medium">
+							${BETTENBOERSE.htmlEntities(announcement.wishes)}
+						</h2>
+						<span class="text-gray-500 font-medium">Wünsche</span>
+					</div>
+				</div>
+			</div>
 		`;
 	},
 	showAnnouncementPopup(announcement, match = null) {
@@ -173,10 +182,10 @@ const BETTENBOERSE = {
 			title: `${BETTENBOERSE.ICON_TYPE_MAP[announcement.type]} – ${
 				announcement.name
 			}`,
-			dialogClass: 'wp-dialog w-64',
+			dialogClass: 'wp-dialog max-w-lg',
 			autoOpen: true,
 			draggable: false,
-			width: '500px',
+			width: '100%',
 			modal: true,
 			resizable: false,
 			closeOnEscape: true,
@@ -186,6 +195,13 @@ const BETTENBOERSE = {
 				of: window,
 			},
 			buttons: [
+				{
+					text: 'E-Mail schreiben',
+					click: () => {
+						window.location.href = 'mailto:' + announcement.email;
+					},
+					class: 'close',
+				},
 				{
 					text: 'Löschen',
 					click: () => {
@@ -224,6 +240,19 @@ const BETTENBOERSE = {
 			},
 		});
 	},
+	deleteAnnouncement(announcement) {
+		jQuery.post(
+			bettenboerse_environment.ajaxurl,
+			{
+				action: 'bettenboerse_delete_announcement',
+				id: announcement.id,
+			},
+			function (response) {
+				console.log('The server responded: ', response);
+				window.location.reload();
+			}
+		);
+	},
 };
 
 jQuery(document).ready(function () {
@@ -233,11 +262,15 @@ jQuery(document).ready(function () {
 		container.getAttribute('data-announcements')
 	);
 
-	BETTENBOERSE.renderAnnouncements(container, announcements);
+	const timeline = BETTENBOERSE.renderAnnouncements(container, announcements);
 
 	// Open the popup when any .announcement-popup-button is clicked
-	jQuery('.announcement-popup-button').click(function () {
-		const announcement = JSON.parse(this.getAttribute('data-announcement'));
-		BETTENBOERSE.showAnnouncementPopup(announcement);
+	jQuery('.announcement-select-button').click(function () {
+		const announcements = JSON.parse(
+			this.getAttribute('data-announcements')
+		);
+		// BETTENBOERSE.showAnnouncementPopup(announcement);
+		timeline.setSelection(announcements);
+		timeline.focus(announcements);
 	});
 });

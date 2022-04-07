@@ -28,7 +28,7 @@ class Match_List_Table extends \WP_List_Table
 				return self::Matches_Column($item->matches);
 
 			case 'request':
-				return self::Request_Column($item->request);
+				return self::Request_Column($item->request, $item->matches);
 
 			case 'matchPercentage':
 				$color = Helpers\get_match_color($match->percentage);
@@ -36,14 +36,14 @@ class Match_List_Table extends \WP_List_Table
 
 				return "<span class=\"px-1 rounded text-lg\" style=\"background: $bg_color; color: $color;\">" . round(floatval($match->percentage) * 100) . ' %' . '</span>';
 
-			case 'matchDuration':
-				return esc_html(Helpers\seconds_to_days($match->duration));
+			// case 'matchDuration':
+			// 	return esc_html(Helpers\seconds_to_days($match->duration));
 
-			case 'actions':
-				return self::Match_Row_Actions($match);
+			// case 'actions':
+			// 	return self::Match_Row_Actions($match);
 
-			default:
-				return print_r($match, true); //Show the whole array for troubleshooting purposes
+			// default:
+			// 	return print_r($match, true); //Show the whole array for troubleshooting purposes
 		}
 	}
 
@@ -62,6 +62,12 @@ class Match_List_Table extends \WP_List_Table
 		?> 
 			<div class="flex flex-col items-start gap-2"> 
 			<?php
+				if (count($matches) === 0) {
+					?>
+					<span class="text-sm text-gray-400">Keine Übereinstimmungen gefunden</span>
+					<?php
+				}
+
 				foreach ($matches as $match) {
 					$color = Helpers\get_match_color($match->percentage);
 					$bg_color = Helpers\get_match_bg_color($match->percentage);
@@ -69,7 +75,10 @@ class Match_List_Table extends \WP_List_Table
 
 					?>
 					<div class="flex w-full bg-white rounded shadow justify-start" style="background: <?php echo $bg_color_alternate; ?>;">
-						<button class="px-2 flex-1 bg-transparent text-pink-700 p-0 border-0 underline announcement-popup-button text-left" data-announcement="<?php echo \esc_attr(json_encode($match->offer)); ?>">
+						<button 
+							class="px-2 flex-1 bg-transparent text-pink-700 p-0 border-0 underline announcement-select-button text-left" 
+							data-announcements="<?php echo \esc_attr(json_encode([$match->offer->id, $match->request->id])); ?>"
+						>
 							<?php echo esc_html($match->offer->name); ?>
 						</button>
 
@@ -86,10 +95,17 @@ class Match_List_Table extends \WP_List_Table
 		return ob_get_clean();
 	}
 
-	static function Request_Column(BedRequest $request) {
+	static function Request_Column(BedRequest $request, $matches) {
+		$offer_ids = array_map(function($match) {
+			return $match->offer->id;
+		}, $matches);
+
 		ob_start();
 		?>
-			<button class="bg-transparent text-blue-800 p-0 border-0 underline announcement-popup-button" data-announcement="<?php echo \esc_attr(json_encode($request)); ?>">
+			<button 
+				class="bg-transparent text-blue-800 p-0 border-0 underline announcement-select-button" 
+				data-announcements="<?php echo \esc_attr(json_encode(array_merge($offer_ids, [$request->id]))); ?>"
+			>
 				<?php echo esc_html($request->name); ?>
 			</button>
 		<?php
@@ -132,7 +148,7 @@ class Admin_UI_Components
 				</details>
 
 				<details open class="mb-20">
-					<summary class="text-xl text-gray-600 cursor-pointer -mb-8">Gefundene Überschneidungen</summary>
+					<summary class="text-xl text-gray-600 cursor-pointer -mb-8">Ersuche 🛏</summary>
 					
 					<?php Admin_UI_Components::Announcement_Match_Table($announcements['requests'], $matches); ?>
 				</details>

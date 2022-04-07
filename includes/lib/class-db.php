@@ -40,6 +40,10 @@ class Database {
 		$this->wpdb->insert($this->table_name, $announcement->toArray());
 	}
 
+	public function delete_announcement(string $id) {
+		var_dump($id);
+		$this->wpdb->delete($this->table_name, ['id' => $id]);
+	}
 
 	public function install() {
 		$charset_collate = $this->wpdb->get_charset_collate();

@@ -23,6 +23,20 @@ class Admin_API {
 	public function __construct() {
 		//\add_action('save_post', [$this, 'save_meta_boxes'], 10, 1);
 		\add_action('wpforms_process_complete', [$this, 'wpforms_submit_action'], 10, 2);
+		\add_action('wp_ajax_bettenboerse_delete_announcement', [$this, 'delete_announcement']);
+	}
+
+	public function delete_announcement() {
+		$id = \sanitize_text_field($_POST['id']);
+
+		if(!\current_user_can('delete_posts')) {
+			\wp_send_json_error('You do not have permission to delete announcements');
+		}
+
+		Database::instance()->delete_announcement($id);
+
+		\wp_send_json_success();
+		\wp_die();
 	}
 
 	public function wpforms_submit_action($fields, $entry) {

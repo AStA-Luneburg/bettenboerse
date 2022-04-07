@@ -27,6 +27,13 @@ class Admin_UI
 				\wp_register_script('visjs-timeline', \esc_url($plugin->assets_url) . 'js/vis-timeline.min.js', ['jquery'], '7.5.1', true);
 				\wp_register_script($plugin->slug . '-admin', \esc_url($plugin->assets_url) . 'js/admin.js', ['jquery', 'jquery-ui-dialog', 'visjs-timeline'], $plugin->_version, true);
 				\wp_enqueue_script($plugin->slug . '-admin');
+				wp_localize_script(
+					$plugin->slug . '-admin', 
+					'bettenboerse_environment',
+					[ 
+						'ajaxurl' => admin_url('admin-ajax.php'),
+					]
+   				);
 
 				// Admin Styles
 				\wp_register_style('visjs-timeline', \esc_url($plugin->assets_url) . 'css/vis-timeline.min.css', [], '7.5.1');

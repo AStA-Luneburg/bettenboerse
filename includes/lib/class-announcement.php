@@ -119,6 +119,7 @@ abstract class IAnnouncement {
 			$announcement = new BedRequest();
 		}
 
+		$announcement->id           = $result->id;
 		$announcement->name         = $result->name;
 		$announcement->email        = $result->email;
 		$announcement->phone        = $result->phone;
