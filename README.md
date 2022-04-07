@@ -1,6 +1,6 @@
 # Bettenbörse WordPress-Plugin
 
-> Funktionen für die [AStA Bettenbörse](https://asta-lueneburg.de/bettenboerse)
+> Funktionen für die [AStA Bettenbörse](https://www.asta-lueneburg.de/service/bettenboerse/)
 
 ## Screenshots
 
