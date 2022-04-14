@@ -1,19 +1,19 @@
 <?php
 namespace AStA\Bettenboerse;
 
-abstract class AnnouncementType {
+class AnnouncementType {
 	const Request = 'request';
 	const Offer = 'offer';
 }
 
-abstract class TypeOfBed {
+class TypeOfBed {
 	const Bed = 'bed';
 	const Couch = 'couch';
 }
 
 
 
-abstract class IAnnouncement {
+class IAnnouncement {
 	public string $id;
 	public string $type;
 	public string $name;
@@ -26,8 +26,8 @@ abstract class IAnnouncement {
 	public ?string $locationHint = null;
 	public ?string $wishes = null;
 
-	public Helpers\JSONDateTime $from;
-	public Helpers\JSONDateTime $until;
+	public $from; // Helpers\JSONDateTime
+	public $until; // Helpers\JSONDateTime
 
 	protected static $text_type_map = [
 		'Ich biete' => AnnouncementType::Offer,
@@ -76,7 +76,7 @@ abstract class IAnnouncement {
 		];
 	}
 
-	public static function withDates(Helpers\JSONDateTime $from, Helpers\JSONDateTime $until, ?string $name = null) {
+	public static function withDates($from, $until, ?string $name = null) {
 		if ($from >= $until) {
 			throw new \Exception('The start date needs to be before the end date.');
 		}
