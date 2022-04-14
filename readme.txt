@@ -29,6 +29,11 @@ This plugin template is designed to help you get started with any new WordPress 
 
 == Changelog ==
 
+= 1.0.2 =
+* 2022-04-14
+* Fixed installing issues
+
+
 = 1.0.1 =
 * 2022-04-14
 * GitHub updating added
