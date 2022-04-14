@@ -136,8 +136,13 @@ class Admin_UI_Components
 	{
 		?>
 			<div class="wrap">
-				<h1>Bettenbörse</h1>
-				<p class="mb-8">Hier können Sie die Bettenbörse verwalten.</p>
+				<div class="w-full flex justify-between items-center">
+					<div>
+						<h1>Bettenbörse</h1>
+						<p class="mb-8">Hier kann die Bettenbörse verwaltet werden.</p>
+					</div>
+					<a href="https://guide.asta-lueneburg.de/docs/bettenboerse" class="button">Hilfe</a>
+				</div>
 
 
 				<details open class="mb-10"> 
@@ -148,13 +153,13 @@ class Admin_UI_Components
 				</details>
 
 				<details open class="mb-20">
-					<summary class="text-xl text-gray-600 cursor-pointer -mb-8">Ersuche 🛏</summary>
+					<summary class="text-xl text-gray-600 cursor-pointer -mb-5">Ersuche 🛏</summary>
 					
 					<?php Admin_UI_Components::Announcement_Match_Table($announcements['requests'], $matches); ?>
 				</details>
 			</div>
 
-			<article id="announcement-dialog" class="max-w-xl">
+			<article id="announcement-dialog" class="max-w-xl flex-1 ">
 				
 			</article>
 		<?php

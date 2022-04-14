@@ -148,6 +148,18 @@ class Bettenboerse {
 		// Handle localisation.
 		$this->load_plugin_textdomain();
 		\add_action('init', [$this, 'load_localisation'], 0);
+
+		$myUpdateChecker = \Puc_v4_Factory::buildUpdateChecker(
+			'https://github.com/AStA-Luneburg/bettenboerse',
+			$this->file,
+			$this->slug
+		);
+
+		//Set the branch that contains the stable release.
+		$myUpdateChecker->setBranch('main');
+
+		//Optional: If you're using a private repository, specify the access token like this:
+		// $myUpdateChecker->setAuthentication('your-token-here');
 	} // End __construct ()
 
 	/**

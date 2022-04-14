@@ -1,4 +1,4 @@
-=== Bettenboerse ===
+=== Bettenbörse ===
 Contributors: Lukas Mateffy
 Tags: wordpress, asta, bettenboerse
 Requires at least: 5.9
@@ -29,12 +29,17 @@ This plugin template is designed to help you get started with any new WordPress 
 
 == Changelog ==
 
-= 1.0 =
+= 1.0.1 =
+* 2022-04-14
+* GitHub updating added
+
+
+= 1.0.0 =
 * 2022-04-01
 * Initial release
 
 == Upgrade Notice ==
 
-= 1.0 =
+= 1.0.0 =
 * 2022-04-01
 * Initial release

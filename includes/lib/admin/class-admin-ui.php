@@ -22,12 +22,15 @@ class Admin_UI
 			'admin_enqueue_scripts', 
 			function() {
 				$plugin = Bettenboerse::instance();
+				$screen = get_current_screen();
+
+				// var_dump($screen);
 
 				// Admin Scripts
 				\wp_register_script('visjs-timeline', \esc_url($plugin->assets_url) . 'js/vis-timeline.min.js', ['jquery'], '7.5.1', true);
 				\wp_register_script($plugin->slug . '-admin', \esc_url($plugin->assets_url) . 'js/admin.js', ['jquery', 'jquery-ui-dialog', 'visjs-timeline'], $plugin->_version, true);
 				\wp_enqueue_script($plugin->slug . '-admin');
-				wp_localize_script(
+				\wp_localize_script(
 					$plugin->slug . '-admin', 
 					'bettenboerse_environment',
 					[ 

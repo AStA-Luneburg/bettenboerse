@@ -13,7 +13,7 @@
 // ];
 
 const BETTENBOERSE = {
-	htmlEntities(str = 'TEST') {
+	htmlEntities(str = '–') {
 		return String(str)
 			.replace(/&/g, '&amp;')
 			.replace(/</g, '&lt;')
@@ -97,21 +97,21 @@ const BETTENBOERSE = {
 	createAnnouncementTableHTML(announcement) {
 		return `
 			<div class="flex flex-col w-full gap-5">
-				<div class="flex flex-row gap-5 mb-2">
-					<div class="flex-1">
+				<div class="grid grid-cols-2 gap-5 mb-2">
+					<div class="col-span-1">
 						<h2 class="text-lg font-medium">
 							${BETTENBOERSE.htmlEntities(announcement.name)}
 						</h2>
 						<span class="text-gray-500 font-medium">Name</span>
 					</div>
-					<div class="flex-1 flex flex-row gap-5">
-						<div class="flex-1">
+					<div class="col-span-1 grid grid-cols-2 gap-5">
+						<div class="col-span-1">
 							<h2 class="text-lg font-medium">
 								${new Date(announcement.from).toLocaleDateString()}
 							</h2>
 							<span class="text-gray-500 font-medium">Von</span>
 						</div>
-						<div class="flex-1">
+						<div class="col-span-1">
 							<h2 class="text-lg font-medium">
 								${new Date(announcement.until).toLocaleDateString()}
 							</h2>
@@ -119,36 +119,36 @@ const BETTENBOERSE = {
 						</div>
 					</div>
 				</div>
-				<div class="flex flex-row gap-5">
-					<div class="flex-1">
+				<div class="grid grid-cols-2 gap-5">
+					<div class="col-span-1">
 						<h2 class="text-base font-medium">
 							${BETTENBOERSE.htmlEntities(announcement.email)}
 						</h2>
 						<span class="text-gray-500 font-medium">E-Mail</span>
 					</div>
-					<div class="flex-1">
+					<div class="col-span-1">
 						<h2 class="text-base font-medium">
 							${BETTENBOERSE.htmlEntities(announcement.phone)}
 						</h2>
 						<span class="text-gray-500 font-medium">Telefon</span>
 					</div>
 				</div>
-				<div class="flex flex-row gap-5">
-					<div class="flex-1">
+				<div class="grid grid-cols-2 gap-5">
+					<div class="col-span-1">
 						<h2 class="text-base font-medium">
 							${BETTENBOERSE.htmlEntities(announcement.gender || '–')}
 						</h2>
 						<span class="text-gray-500 font-medium">Geschlecht</span>
 					</div>
 				</div>
-				<div class="flex flex-row gap-5">
-					<div class="flex-1">
+				<div class="grid grid-cols-2 gap-5">
+					<div class="col-span-1">
 						<h2 class="text-base font-medium">
 							${BETTENBOERSE.htmlEntities(announcement.bedType)}
 						</h2>
 						<span class="text-gray-500 font-medium">Bett-Typ</span>
 					</div>
-					<div class="flex-1">
+					<div class="col-span-1">
 						<h2 class="text-base font-medium">
 							${parseInt(announcement.bedCount)} 
 							
@@ -158,14 +158,14 @@ const BETTENBOERSE = {
 					</div>
 				</div>
 
-				<div class="flex flex-row gap-5 justify-between">
-					<div class="flex-1">
+				<div class="grid grid-cols-2 gap-5 justify-between">
+					<div class="col-span-1">
 						<h2 class="text-base font-medium">
-							${BETTENBOERSE.htmlEntities(announcement.locationHints)}
+							${BETTENBOERSE.htmlEntities(announcement.locationHint)}
 						</h2>
 						<span class="text-gray-500 font-medium">Ortsinformationen</span>
 					</div>
-					<div class="flex-1">
+					<div class="col-span-1">
 						<h2 class="text-base font-medium">
 							${BETTENBOERSE.htmlEntities(announcement.wishes)}
 						</h2>
@@ -184,10 +184,12 @@ const BETTENBOERSE = {
 			title: `${BETTENBOERSE.ICON_TYPE_MAP[announcement.type]} – ${
 				announcement.name
 			}`,
-			dialogClass: 'wp-dialog max-w-lg',
+			dialogClass:
+				'wp-dialog max-w-lg flex flex-col min-h-full sm:min-h-fit truncate',
 			autoOpen: true,
 			draggable: false,
 			width: '100%',
+			height: '',
 			modal: true,
 			resizable: false,
 			closeOnEscape: true,

@@ -173,7 +173,7 @@ class Settings {
 	 * @return array        Modified links.
 	 */
 	public function add_settings_link($links) {
-		$settings_link = '<a href="options-general.php?page=' . $this->parent->slug . '_settings">' . __('Settings', 'bettenboerse') . '</a>';
+		$settings_link = '<a href="options-general.php?page=' . $this->parent->slug . '_settings">' . __('Settings') . '</a>';
 		array_push($links, $settings_link);
 		return $links;
 	}
@@ -201,6 +201,15 @@ class Settings {
 			'title'       => __('WPForms Zuweisung', 'bettenboerse'),
 			'description' => __('Die Felder des Formulars können hier den Daten zugeteilt werden.', 'bettenboerse'),
 			'fields'      => array(
+				array(
+					'id'          => 'form_field',
+					'label'       => __('ID des Formulars', 'bettenboerse'),
+					'description' => __('Die WPForms ID', 'bettenboerse'),
+					'type'        => 'number',
+					'min'         => 0,
+					'default'     => '',
+					'placeholder' => __('Formular-ID', 'bettenboerse'),
+				),
 				array(
 					'id'          => 'name_field',
 					'label'       => __('Feld für den Namen', 'bettenboerse'),

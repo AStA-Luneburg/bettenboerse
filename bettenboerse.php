@@ -2,8 +2,8 @@
 namespace AStA\Bettenboerse;
 
 /**
- * Plugin Name: Bettenboerse
- * Version: 1.0.0
+ * Plugin Name: Bettenbörse
+ * Version: 1.0.1
  * Plugin URI: https://github.com/AStA-Luneburg/bettenboerse
  * Description: Funktionen für die AStA Bettenbörse 
  * Author: Lukas Mateffy
@@ -16,7 +16,6 @@ namespace AStA\Bettenboerse;
  *
  * @package WordPress
  * @author Lukas Mateffy
- * @since 1.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -24,6 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Load plugin class files.
+require 'includes/plugin-update-checker-4.11/plugin-update-checker.php';
 require_once 'includes/lib/class-db.php';
 require_once 'includes/class-bettenboerse.php';
 require_once 'includes/class-settings.php';
@@ -40,14 +40,16 @@ require_once 'includes/lib/admin/class-admin-ui.php';
 // require_once 'includes/lib/class-post-type.php';
 // require_once 'includes/lib/class-taxonomy.php';
 
+define('BETTENBOERSE_VERSION', '1.0.1');
+define('BETTENBOERSE_FILE', __FILE__);
+
 /**
  * Returns the main instance of Bettenboerse to prevent the need to use globals.
  *
- * @since  1.0.0
  * @return object Bettenboerse
  */
 function bettenboerse() {
-	$instance = Bettenboerse::instance( __FILE__, '1.0.0' );
+	$instance = Bettenboerse::instance(BETTENBOERSE_FILE, BETTENBOERSE_VERSION);
 
 	if ( is_null( $instance->settings ) ) {
 		$instance->settings = Settings::instance( $instance );
