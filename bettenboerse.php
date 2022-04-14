@@ -3,7 +3,7 @@ namespace AStA\Bettenboerse;
 
 /**
  * Plugin Name: Bettenbörse
- * Version: 1.0.1
+ * Version: 1.0.2
  * Plugin URI: https://github.com/AStA-Luneburg/bettenboerse
  * Description: Funktionen für die AStA Bettenbörse 
  * Author: Lukas Mateffy
@@ -40,7 +40,7 @@ require_once 'includes/lib/admin/class-admin-ui.php';
 // require_once 'includes/lib/class-post-type.php';
 // require_once 'includes/lib/class-taxonomy.php';
 
-define('BETTENBOERSE_VERSION', '1.0.1');
+define('BETTENBOERSE_VERSION', '1.0.2');
 define('BETTENBOERSE_FILE', __FILE__);
 
 /**
