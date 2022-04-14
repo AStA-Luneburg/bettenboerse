@@ -34,21 +34,39 @@ class IAnnouncement {
 		'Ich suche' => AnnouncementType::Request,
 	];
 
+	// Production ID Map
 	protected static $id_field_map = [
-		0 => 'name',
-		1 => 'email',
-		3 => 'type',
-		4 => 'phone',
-		6 => 'bedType',
+		1 => 'name',
+		2 => 'email',
+		6 => 'type',
+		5 => 'phone',
+		7 => 'bedType',
 		8 => 'bedCount',
-		9 => 'from',
-		10 => 'until',
+		15 => 'from',
+		16 => 'until',
 		12 => 'locationHint',
 		13 => 'wishes',
 		14 => 'privacy',
-		15 => 'gender',
+		3 => 'gender',
 		//
 	];
+
+	// Dev ID Map
+	// protected static $id_field_map = [
+	// 	0 => 'name',
+	// 	1 => 'email',
+	// 	3 => 'type',
+	// 	4 => 'phone',
+	// 	6 => 'bedType',
+	// 	8 => 'bedCount',
+	// 	9 => 'from',
+	// 	10 => 'until',
+	// 	12 => 'locationHint',
+	// 	13 => 'wishes',
+	// 	14 => 'privacy',
+	// 	15 => 'gender',
+	// 	//
+	// ];
 
 
 	function __construct() {

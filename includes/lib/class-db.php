@@ -41,7 +41,6 @@ class Database {
 	}
 
 	public function delete_announcement(string $id) {
-		var_dump($id);
 		$this->wpdb->delete($this->table_name, ['id' => $id]);
 	}
 

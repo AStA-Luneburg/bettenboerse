@@ -24,7 +24,8 @@ class Admin_UI
 				$plugin = Bettenboerse::instance();
 				$screen = get_current_screen();
 
-				// var_dump($screen);
+				if($screen->id !== 'toplevel_page_bettenboerse')
+					return;
 
 				// Admin Scripts
 				\wp_register_script('visjs-timeline', \esc_url($plugin->assets_url) . 'js/vis-timeline.min.js', ['jquery'], '7.5.1', true);

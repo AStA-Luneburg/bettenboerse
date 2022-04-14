@@ -160,13 +160,13 @@ const BETTENBOERSE = {
 
 				<div class="grid grid-cols-2 gap-5 justify-between">
 					<div class="col-span-1">
-						<h2 class="text-base font-medium">
+						<h2 class="text-base font-medium truncate">
 							${BETTENBOERSE.htmlEntities(announcement.locationHint)}
 						</h2>
 						<span class="text-gray-500 font-medium">Ortsinformationen</span>
 					</div>
 					<div class="col-span-1">
-						<h2 class="text-base font-medium">
+						<h2 class="text-base font-medium truncate">
 							${BETTENBOERSE.htmlEntities(announcement.wishes)}
 						</h2>
 						<span class="text-gray-500 font-medium">Wünsche</span>
