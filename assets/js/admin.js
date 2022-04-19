@@ -208,7 +208,7 @@ const BETTENBOERSE = {
 				},
 				{
 					text: 'Löschen',
-					click: () => {
+					click: async (e) => {
 						if (
 							!confirm(
 								'Bist du sicher, dass du diesen Eintrag löschen möchtest?'
@@ -217,8 +217,12 @@ const BETTENBOERSE = {
 							return;
 						}
 
-						BETTENBOERSE.deleteAnnouncement(announcement);
-						jQuery('#announcement-dialog').dialog('close');
+						e.target.disabled = true;
+						e.target.textContent = 'Wird gelöscht...';
+
+						await BETTENBOERSE.deleteAnnouncement(announcement);
+						window.location.reload();
+						// jQuery('#announcement-dialog').dialog('close');
 					},
 					class: 'bg-red-500 border border-red-600 text-white hover:bg-red-700 hover:text-white active:bg-red-700 focus:bg-red-700 focus:text-white',
 				},
@@ -244,7 +248,7 @@ const BETTENBOERSE = {
 			},
 		});
 	},
-	deleteAnnouncement(announcement) {
+	async deleteAnnouncement(announcement) {
 		jQuery.post(
 			bettenboerse_environment.ajaxurl,
 			{
@@ -253,7 +257,6 @@ const BETTENBOERSE = {
 			},
 			function (response) {
 				console.log('The server responded: ', response);
-				window.location.reload();
 			}
 		);
 	},

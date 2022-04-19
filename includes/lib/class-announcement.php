@@ -34,7 +34,7 @@ class IAnnouncement {
 		'Ich suche' => AnnouncementType::Request,
 	];
 
-	// Production ID Map
+	// Die Formular Felder in der AStA WP Instanz
 	protected static $id_field_map = [
 		1 => 'name',
 		2 => 'email',
@@ -51,22 +51,22 @@ class IAnnouncement {
 		//
 	];
 
-	// Dev ID Map
-	// protected static $id_field_map = [
-	// 	0 => 'name',
-	// 	1 => 'email',
-	// 	3 => 'type',
-	// 	4 => 'phone',
-	// 	6 => 'bedType',
-	// 	8 => 'bedCount',
-	// 	9 => 'from',
-	// 	10 => 'until',
-	// 	12 => 'locationHint',
-	// 	13 => 'wishes',
-	// 	14 => 'privacy',
-	// 	15 => 'gender',
-	// 	//
-	// ];
+	// Die Formular Felder im der DEV WP Instanz.
+	protected static $dev_id_field_map = [
+		0 => 'name',
+		1 => 'email',
+		3 => 'type',
+		4 => 'phone',
+		6 => 'bedType',
+		8 => 'bedCount',
+		9 => 'from',
+		10 => 'until',
+		12 => 'locationHint',
+		13 => 'wishes',
+		14 => 'privacy',
+		15 => 'gender',
+		//
+	];
 
 
 	function __construct() {
@@ -167,7 +167,10 @@ class IAnnouncement {
 
 		// Parse and validate fields
 		foreach ($fields as $field) {
-			$key = self::$id_field_map[$field['id']];
+			$key = defined('ASTA_ENV') && ASTA_ENV == 'development'
+				? self::$dev_id_field_map[$field['id']]
+				: self::$id_field_map[$field['id']];
+				
 			$value = $field['value'];
 			
 			// Throw on unknown field

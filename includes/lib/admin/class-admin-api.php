@@ -21,8 +21,18 @@ class Admin_API {
 	 * Constructor function
 	 */
 	public function __construct() {
-		//\add_action('save_post', [$this, 'save_meta_boxes'], 10, 1);
-		\add_action('wpforms_process_complete', [$this, 'wpforms_submit_action'], 10, 2);
+		// Wenn wir im Entwicklungsmodus sind (local env) dann wird eine 
+		$form_id = defined('ASTA_ENV') && ASTA_ENV == 'development'
+			? BETTENBOERSE_FORM_ID_DEVELOPMENT
+			: BETTENBOERSE_FORM_ID;
+
+		\add_action(
+			'wpforms_process_complete_' . $form_id, 
+			[$this, 'wpforms_submit_action'], 
+			10, 
+			2
+		);
+
 		\add_action('wp_ajax_bettenboerse_delete_announcement', [$this, 'delete_announcement']);
 	}
 

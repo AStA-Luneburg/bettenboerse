@@ -3,7 +3,7 @@ namespace AStA\Bettenboerse;
 
 /**
  * Plugin Name: Bettenbörse
- * Version: 1.0.2
+ * Version: 1.1.0
  * Plugin URI: https://github.com/AStA-Luneburg/bettenboerse
  * Description: Funktionen für die AStA Bettenbörse 
  * Author: Lukas Mateffy
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Load plugin class files.
-require 'includes/plugin-update-checker-4.11/plugin-update-checker.php';
+require_once 'includes/plugin-update-checker-4.11/plugin-update-checker.php';
 require_once 'includes/lib/class-db.php';
 require_once 'includes/class-bettenboerse.php';
 require_once 'includes/class-settings.php';
@@ -40,8 +40,20 @@ require_once 'includes/lib/admin/class-admin-ui.php';
 // require_once 'includes/lib/class-post-type.php';
 // require_once 'includes/lib/class-taxonomy.php';
 
-define('BETTENBOERSE_VERSION', '1.0.2');
+define('BETTENBOERSE_VERSION', '1.1.0');
 define('BETTENBOERSE_FILE', __FILE__);
+
+/*
+ * Diese ID ist nur für Entwicklungszwecke!
+ * Sie wird automatisch genutzt, wenn ASTA_ENV auf 'development' define()'d ist.
+ */
+define('BETTENBOERSE_FORM_ID_DEVELOPMENT', '6');
+
+/*
+ * Diese ID muss angepasst werden, falls das WPForms Formular 
+ * auf asta-lueneburg.de geändert wird.
+ */
+define('BETTENBOERSE_FORM_ID', '4697');
 
 /**
  * Returns the main instance of Bettenboerse to prevent the need to use globals.
