@@ -248,17 +248,20 @@ const BETTENBOERSE = {
 			},
 		});
 	},
-	async deleteAnnouncement(announcement) {
-		jQuery.post(
-			bettenboerse_environment.ajaxurl,
-			{
-				action: 'bettenboerse_delete_announcement',
-				id: announcement.id,
-			},
-			function (response) {
-				console.log('The server responded: ', response);
-			}
-		);
+	deleteAnnouncement(announcement) {
+		return new Promise((resolve, reject) => {
+			jQuery.post(
+				bettenboerse_environment.ajaxurl,
+				{
+					action: 'bettenboerse_delete_announcement',
+					id: announcement.id,
+				},
+				function (response) {
+					console.log('The server responded: ', response);
+					resolve();
+				}
+			);
+		});
 	},
 };
 
