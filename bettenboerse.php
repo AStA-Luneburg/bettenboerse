@@ -3,13 +3,13 @@ namespace AStA\Bettenboerse;
 
 /**
  * Plugin Name: Bettenbörse
- * Version: 1.1.0
+ * Version: 1.1.1
  * Plugin URI: https://github.com/AStA-Luneburg/bettenboerse
  * Description: Funktionen für die AStA Bettenbörse 
  * Author: Lukas Mateffy
  * Author URI: https://mateffy.me
  * Requires at least: 5.9
- * Tested up to: 5.9
+ * Tested up to: 6.0
  *
  * Text Domain: bettenboerse
  * Domain Path: /lang/
