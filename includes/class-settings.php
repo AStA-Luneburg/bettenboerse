@@ -132,7 +132,7 @@ class Settings {
 				'parent_slug' => 'options-general.php',
 				'page_title'  => __('Einstellungen der Bettenbörse', 'bettenboerse'),
 				'menu_title'  => __('Bettenbörse', 'bettenboerse'),
-				'capability'  => 'manage_options',
+				'capability'  => BETTENBOERSE_CAPABILITY,
 				'menu_slug'   => $this->parent->slug . '_settings',
 				'function'    => array($this, 'settings_page'),
 				'icon_url'    => '',

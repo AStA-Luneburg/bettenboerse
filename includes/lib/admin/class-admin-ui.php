@@ -52,7 +52,7 @@ class Admin_UI
 			add_menu_page(
 				'Verwaltung – Bettenbörse',
 				'Bettenbörse',
-				'manage_options',
+				BETTENBOERSE_CAPABILITY,
 				'bettenboerse',
 				function() {
 					$announcements = $this->fetch_announcements();

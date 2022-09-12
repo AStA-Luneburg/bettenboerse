@@ -42,6 +42,7 @@ require_once 'includes/lib/admin/class-admin-ui.php';
 
 define('BETTENBOERSE_VERSION', '1.1.0');
 define('BETTENBOERSE_FILE', __FILE__);
+define('BETTENBOERSE_CAPABILITY', 'manage_bettenboerse');
 
 /*
  * Diese ID ist nur für Entwicklungszwecke!
